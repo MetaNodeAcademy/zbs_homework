@@ -1,0 +1,244 @@
+控制流程
+ 只出现一次的数字：
+给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。可以使用 for 循环遍历数组，结合 if 条件判断和 map 数据结构来解决，例如通过 map 记录每个元素出现的次数，然后再遍历 map 找到出现次数为1的元素。
+func getNum() {
+
+	intArray := [8]int{1, 2, 2, 3, 3, 4, 4, 5}
+
+	intMap := make(map[int]int, 4)
+
+	for _, value := range intArray {
+
+		mapValue, flag := intMap[value]
+
+		if flag {
+			mapValue++
+			intMap[value] = mapValue
+		} else {
+			intMap[value] = 1
+		}
+	}
+
+	for item, value := range intMap {
+		if value == 1 {
+			println("数组中出现过一次的元素：", item)
+		}
+
+	}
+}
+
+
+回文数
+给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
+回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+● 例如，121 是回文，而 123 不是。
+
+func isPalindrome() (result bool) {
+
+	x := 123
+
+	if x < 0 {
+		result = false
+	}
+
+	old := x
+
+	new := 0
+	for x > 0 {
+
+		digit := x % 10
+		new = new*10 + digit
+		x = x / 10
+	}
+
+	if new == old {
+		result = true
+	}
+
+	return result
+}
+转换成字符串
+if x < 0 {
+		return false
+	}
+
+	str := strconv.Itoa(x)
+
+	left, right := 0, len(str)-1
+
+	for left < right {
+
+		if str[left] != str[right] {
+			return false
+		}
+		left++
+		right--
+	}
+	return true
+有效的括号
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+有效字符串需满足：
+1. 左括号必须用相同类型的右括号闭合。
+2. 左括号必须以正确的顺序闭合。
+3. 每个右括号都有一个对应的相同类型的左括号。
+
+func isValid (s string) (bool){
+
+	stack := []rune {}
+
+	strMap := map[rune] rune{
+		')':'(',
+		']':'[',
+		'}':'{',
+	}
+
+	for _,char := range s {
+
+		if val,ok :=strMap[char]; ok {
+			if len(stack) == 0 || stack[len(stack) - 1 ] != val{
+				return  false
+			}else {
+				stack = stack[:len(stack)-1]
+			}
+		}else {
+			stack = append(stack, char)
+		}
+
+	}
+	return true
+
+}
+
+最长公共前缀
+编写一个函数来查找字符串数组中的最长公共前缀。
+如果不存在公共前缀，返回空字符串 ""。
+func test(str []string) string {
+
+	if len(str) == 0 {
+		return ""
+	}
+
+	for i := 0; i < len(str[0]); i++ {
+		char := str[0][i]
+		for j := 1; j < len(str); j++ {
+			if i >= len(str[j]) || str[j][i] != char {
+				return str[0][:i]
+			}
+
+		}
+	}
+	return ""
+}
+
+加一
+给定一个表示 大整数 的整数数组 digits，其中 digits[i] 是整数的第 i 位数字。这些数字按从左到右，从最高位到最低位排列。这个大整数不包含任何前导 0。
+将大整数加 1，并返回结果的数字数组
+
+func plusOne(digits []int) []int {
+last := digits[len(digits)-1]
+	last += 1
+	digits = append(digits[:len(digits)-1])
+	if last == 10 {
+		newInts := []int{1, 0}
+		digits = append(digits, newInts...)
+	} else {
+		digits = append(digits, last)
+	}
+    return digits
+}
+
+ 删除有序数组中的重复项
+给你一个 非严格递增排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。 考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过： 更改数组 nums ，使 nums 的前 k 个元素包含唯一元素，并按照它们最初在 nums 中出现的顺序排列。nums 的其余元素与 nums 的大小不重要。
+func deleteNums(nums []int) int {
+
+
+	if len(nums) == 0 {
+		return 0
+	}
+
+	slow := 0
+
+
+	for fast := 1; fast < len(nums); fast++ {
+	
+		if nums[fast] != nums[slow] {
+	
+			slow++
+		
+			nums[slow] = nums[fast]
+		}
+	}
+
+	fmt.Println(slow + 1)
+	return slow + 1
+}
+
+
+合并区间
+以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+
+示例 1：
+输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+输出：[[1,6],[8,10],[15,18]]
+解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+示例 2：
+输入：intervals = [[1,4],[4,5]]
+输出：[[1,5]]
+解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+
+func removeDuplicates(nums []int) int {
+	itemMap := make(map[int] int,len(nums))
+
+	for _,val := range nums{
+		if item,ok := itemMap[val];ok{
+			itemMap[val] = item+1
+		}else {
+			itemMap[val] = 1
+		}
+	}
+
+
+	newNums := []int{}
+	for key,value := range itemMap{
+		if value == 1 {
+			newNums = append(newNums,key )
+		}
+
+	}
+    nums = newNums
+    return  len(nums)
+}
+
+两数之和
+给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
+你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。
+你可以按任意顺序返回答案。
+
+示例 1：
+输入：nums = [2,7,11,15], target = 9
+输出：[0,1]
+解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+示例 2：
+输入：nums = [3,2,4], target = 6
+输出：[1,2]
+示例 3：
+输入：nums = [3,3], target = 6
+输出：[0,1]
+func twoSum(nums []int, target int) []int {
+    
+	result := []int {}
+
+	for i := 0; i < len(nums); i++ {
+	
+		for j := 1; j < len(nums); j++ {
+			if 	nums[i] + nums[j] == target {
+				result = append(result,i,j )
+				return result
+			}
+		}
+	}
+				return result
+
+
+}
+
